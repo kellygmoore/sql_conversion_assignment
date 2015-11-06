@@ -73,11 +73,31 @@ app.post('/data', function(req,res){
 });
 
 app.delete('/data', function(req,res){
-    console.log(req.body.id);
 
-    Person.findByIdAndRemove({"_id" : req.body.id}, function(err, data){
-        if(err) console.log(err);
-        res.send(data);
+    var useId = req.body.id;
+    console.log(useId);
+    pg.connect(connectionString, function (err, client) {
+        //if(err) console.log(err);
+
+        client.query("DELETE FROM people WHERE id=($1)", [req.body.id],
+
+        function(err, result) {
+            if(err) {
+                console.log("Error inserting data: ", err);
+                res.send(false);
+            }
+
+            res.send(true);
+        });
+        //res.send("Hello - how are you?");
+        //+ req.body.id);
+    //({"id" : req.body.id}, function(err, data){
+
+        //query.on('end', function() {
+        //    done();
+        //    return res.json(results);
+        //});
+
     });
 
 
